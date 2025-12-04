@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Erioperatsioon Brüssel</title>
+  <style>
+    #map { height: 500px; width: 100%; }
+  </style>
+</head>
+<body>
+  <h1>Tartu–Brüssel edenemine</h1>
+  <div id="map"></div>
+
+  <script>
+    const totalKm = 2000;
+    const tartu = {lat: 58.37307488694068, lng: 26.726976347863893}; 
+    const brussel = {lat: 50.844990391302076, lng: 4.349986359265218};
+
+    // Näidisandmed – hiljem loed Google Sheetsist
+    const teams = {
+      "Tartu tiim": 850,
+      "Brüsseli tiim": 1200
+    };
+
+    function interpolatePosition(start, end, progress) {
+      return {
+        lat: start.lat + progress * (end.lat - start.lat),
+        lng: start.lng + progress * (end.lng - start.lng)
+      };
+    }
+
+    function initMap() {
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 5,
+        center: {lat: 54, lng: 15}
+      });
+
+      // Lisa markerid
+      for (const [team, km] of Object.entries(teams)) {
+        const progress = Math.min(km / totalKm, 1);
+        const pos = interpolatePosition(tartu, brussel, progress);
+
+        new google.maps.Marker({
+          position: pos,
+          map,
+          title: team
+        });
+      }
+    }
+  </script>
+
+  <!-- Google Maps API -->
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+  </script>
+</body>
+</html>
