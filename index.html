@@ -1,21 +1,27 @@
-
 <!DOCTYPE html>
-<html lang="et">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Tartu–Brüssel–Tartu võistlus</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Testkaart</title>
+  <style>
+    #map { height: 600px; width: 100%; }
+  </style>
 </head>
 <body>
-  <h1>Tartu–Brüssel–Tartu edenemine</h1>
+  <h1>Testkaart</h1>
   <div id="map"></div>
 
-  <!-- Sinu JavaScript -->
-  <script src="br.js"></script>
+  <script>
+    function initMap() {
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 5,
+        center: {lat: 54, lng: 15}
+      });
+    }
+  </script>
 
-  <!-- Google Maps API (pane siia oma API võti) -->
   <script async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAz0qwtTtMnqMHniRJ27lCcZ1phPIer78g&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_REAL_API_KEY&callback=initMap">
   </script>
 </body>
 </html>
