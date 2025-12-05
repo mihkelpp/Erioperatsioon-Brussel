@@ -37,24 +37,18 @@ function initMap() {
     center: {lat: 54, lng: 15}
   });
 
-  // Lae andmed Google Sheetsist
-  fetch(sheetUrl)
-    .then(res => res.text())
-    .then(data => {
-      const rows = data.split("\n").map(r => r.split(","));
-      // Jäta päis vahele
-      rows.slice(1).forEach(row => {
-        const team = row[0].trim();
-        const km = parseInt(row[1]);
-        if (!isNaN(km) && team) {
-          const pos = getPosition(km);
-          new google.maps.Marker({
-            position: pos,
-            map,
-            title: `${team}: ${km} km`
-          });
-        }
-      });
-    })
-    .catch(err => console.error("CSV laadimise viga:", err));
+  // Testmarker Tartus
+  new google.maps.Marker({
+    position: {lat: 58.373, lng: 26.727},
+    map,
+    title: "Tartu"
+  });
+
+  // Testmarker Brüsselis
+  new google.maps.Marker({
+    position: {lat: 50.845, lng: 4.350},
+    map,
+    title: "Brüssel"
+  });
 }
+
