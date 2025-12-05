@@ -30,17 +30,26 @@ function initMap() {
   fetch(sheetUrl)
   .then(res => res.text())
   .then(data => {
-    console.log("Raw CSV:", data); // 👉 näed kogu faili sisu konsoolis
-
-    // Kui failis on TAB eraldaja, kasuta split("\t")
     const rows = data.split("\n").map(r => r.split("\t"));
-    console.log("Parsed rows:", rows); // 👉 näed iga rida massiivina
+    console.log("Parsed rows:", rows);
 
-    // Test: näita iga rida konsoolis
-    rows.forEach(row => {
-      console.log("Row:", row);
+    rows.slice(1).forEach(row => {
+      if (row.length < 2) return; // jätame vahele, kui distantsi pole
+
+      const team = row[0].trim();
+      const km = parseFloat(row[1].replace(",", "."));
+      if (!isNaN(km) && team) {
+        console.log("Team:", team, "KM:", km);
+        const pos = getPosition(km);
+        new google.maps.Marker({
+          position: pos,
+          map,
+          title: `${team}: ${km} km`
+        });
+      }
     });
   })
   .catch(err => console.error("CSV laadimise viga:", err));
+
 
 }
