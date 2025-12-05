@@ -1,19 +1,18 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: #f9f9f9;
+  color: #333;
+}
 
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
 #map {
   height: 600px;
   width: 100%;
+  border: 2px solid #444;
+  border-radius: 8px;
 }
-
-rows.slice(1).forEach(row => {
-  const team = row[0];
-  const km = parseInt(row[1]);
-  if (!isNaN(km)) {
-    const pos = getPosition(km);
-    new google.maps.Marker({
-      position: pos,
-      map,
-      title: team
-    });
-  }
-});
