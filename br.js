@@ -14,15 +14,12 @@ function interpolatePosition(start, end, progress) {
 }
 
 function getPosition(km) {
-  if (km <= 2000) {
-    const progress = km / 2000;
+  if (km <= 4150) {
+    const progress = km / 4150;
     return interpolatePosition(tartu, brussel, progress);
-  } else if (km <= 4000) {
-    const progress = (km - 2000) / 2000;
-    return interpolatePosition(brussel, tartu, progress);
   } else {
-    // Kui distants ületab 4000 km, jää marker Tartusse
-    return tartu;
+    const progress = (km - 4150) / 4150;
+    return interpolatePosition(brussel, tartu, progress);
   }
 }
 
