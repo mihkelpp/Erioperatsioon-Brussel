@@ -28,23 +28,19 @@ function initMap() {
   });
 
   fetch(sheetUrl)
-    .then(res => res.text())
-    .then(data => {
-      const rows = data.split("\n").map(r => r.split("\t")); // CSV kasutab TAB eraldajat
-      console.log("CSV read:", rows);
+  .then(res => res.text())
+  .then(data => {
+    console.log("Raw CSV:", data); // 👉 näed kogu faili sisu konsoolis
 
-      rows.slice(1).forEach(row => {
-        const team = row[0].trim();
-        const km = parseFloat(row[1].replace(",", "."));
-        if (!isNaN(km) && team) {
-          const pos = getPosition(km);
-          new google.maps.Marker({
-            position: pos,
-            map,
-            title: `${team}: ${km} km`
-          });
-        }
-      });
-    })
-    .catch(err => console.error("CSV laadimise viga:", err));
+    // Kui failis on TAB eraldaja, kasuta split("\t")
+    const rows = data.split("\n").map(r => r.split("\t"));
+    console.log("Parsed rows:", rows); // 👉 näed iga rida massiivina
+
+    // Test: näita iga rida konsoolis
+    rows.forEach(row => {
+      console.log("Row:", row);
+    });
+  })
+  .catch(err => console.error("CSV laadimise viga:", err));
+
 }
