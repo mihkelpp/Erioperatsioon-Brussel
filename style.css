@@ -1,10 +1,12 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-}
-#map {
-  height: 600px;
-  width: 100%;
-  border: 2px solid #333;
-}
-
+rows.slice(1).forEach(row => {
+  const team = row[0];
+  const km = parseInt(row[1]);
+  if (!isNaN(km)) {
+    const pos = getPosition(km);
+    new google.maps.Marker({
+      position: pos,
+      map,
+      title: team
+    });
+  }
+});
