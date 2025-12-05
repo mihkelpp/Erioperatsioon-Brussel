@@ -1,4 +1,4 @@
-
+//
 const totalKm = 4150; // Tartu–Brüssel–Tartu
 const tartu = {lat: 58.37307488694068, lng: 26.726976347863893};
 const brussel = {lat: 50.844990391302076, lng: 4.349986359265218};
