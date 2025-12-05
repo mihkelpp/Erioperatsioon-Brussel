@@ -2,7 +2,7 @@
 const tartu = {lat: 58.37307488694068, lng: 26.726976347863893};
 const brussel = {lat: 50.844990391302076, lng: 4.349986359265218};
 
-// Google Sheets CSV link (Publish to web → CSV)
+// Google Sheets CSV link
 const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR00B6HxmGhC0bhhGIp3bEMt-mcvu1Tb185GvmlR2_sGsGth6Bwb3cr0F0Y7cXFg0WiQC6PTY4oJC8Q/pub?gid=0&single=true&output=csv";
 
 // Interpoleeri kahe punkti vahel
@@ -61,12 +61,16 @@ function initMap() {
 
         if (!isNaN(km) && team) {
           const pos = getPosition(km);
-          console.log("Marker positsioon:", pos);
+
+          // Markerite värv: punane Brüsseli suunal, roheline tagasiteel
+          const iconColor = km <= 2000 ? "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                                       : "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
 
           new google.maps.Marker({
             position: pos,
             map,
-            title: `${team}: ${km} km`
+            title: `${team}: ${km} km`,
+            icon: iconColor
           });
         }
       });
