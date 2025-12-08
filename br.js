@@ -11,6 +11,7 @@ function initMap() {
     center: tartu
   });
 
+  
   const directionsService = new google.maps.DirectionsService();
   const directionsRenderer = new google.maps.DirectionsRenderer();
   directionsRenderer.setMap(map);
