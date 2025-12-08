@@ -78,4 +78,25 @@ function initMap() {
       }
     }
   );
+  
+  // Legend HTML
+const legend = document.createElement("div");
+legend.id = "legend";
+legend.style.background = "#fff";
+legend.style.padding = "10px";
+legend.style.margin = "10px";
+legend.style.fontSize = "14px";
+legend.style.fontFamily = "Arial, sans-serif";
+legend.style.border = "1px solid #ccc";
+
+// Legendisisu
+legend.innerHTML = `
+  <h3>Legend</h3>
+  <p><img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"> Punane marker - Brüsseli suund</p>
+  <p><img src="http://maps.google.com/mapfiles/ms/icons/green-dot.png"> Roheline marker - tagasiteel</p>
+`;
+
+// Lisa legend kaardile (paremale alla)
+map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
+
 }
