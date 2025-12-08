@@ -92,8 +92,9 @@ legend.style.border = "1px solid #ccc";
 // Legendisisu
 legend.innerHTML = `
   <h3>Legend</h3>
-  <p><img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"> Punane marker - Brüsseli suund</p>
-  <p><img src="http://maps.google.com/mapfiles/ms/icons/green-dot.png"> Roheline marker - tagasiteel</p>
+  <p><img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"> Suund Brüsselisse</p>
+  <p><img src="http://maps.google.com/mapfiles/ms/icons/green-dot.png"> Suund tagasi</p>
+  <p>Võiskonna nimi ja distants on nähtav kursori markeril hoidmisel</p>
 `;
 
 // Lisa legend kaardile (paremale alla)
