@@ -12,6 +12,15 @@ let route = [];
 let totalPoints = 0;
 const teamMarkers = {}; // hoiame markerid võistkondade kaupa
 
+// Hajutamise funktsioon (et lõpp-punktis markerid ei kattuks)
+function jitterPosition(basePos, index) {
+  const offset = 0.0005; // ~50m nihke
+  return {
+    lat: basePos.lat + offset * Math.cos(index * 2 * Math.PI / 10),
+    lng: basePos.lng + offset * Math.sin(index * 2 * Math.PI / 10)
+  };
+}
+
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 5,
@@ -43,7 +52,7 @@ function initMap() {
             const rows = data.trim().split("\n");
             const select = document.getElementById("teamSelect");
 
-            rows.slice(1).forEach(line => {
+            rows.slice(1).forEach((line, idx) => {
               const clean = line.replace(/\r/g, "").replace(/"/g, "");
               const parts = clean.split(",");
               if (parts.length < 2) return;
@@ -53,27 +62,28 @@ function initMap() {
               const km = parseFloat(kmRaw.replace(",", "."));
 
               if (!isNaN(km)) {
-                let idx;
-                if (km <= 2000) {
+                let pos;
+                if (km > 4150) {
+                  // Kohale jõudnud – hajutame lõpp-punktis
+                  pos = jitterPosition(route[totalPoints - 1], idx);
+                } else if (km <= 2000) {
                   // Brüsseli suunal
                   const progress = km / 2000;
-                  idx = Math.floor(progress * totalPoints);
+                  const routeIdx = Math.floor(progress * totalPoints);
+                  pos = route[Math.min(routeIdx, totalPoints - 1)];
                 } else {
                   // Tagasitee
                   const backProgress = (km - 2000) / 2000;
-                  idx = Math.floor((1 - backProgress) * totalPoints);
+                  const routeIdx = Math.floor((1 - backProgress) * totalPoints);
+                  pos = route[Math.min(routeIdx, totalPoints - 1)];
                 }
-
-                const pos = jitterPosition(route[totalPoints - 1], Object.keys(teamMarkers).length);
-
 
                 // Markerite värv
                 const iconColor = km > 4150
-  ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-  : km <= 2000
-    ? "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-    : "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-
+                  ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                  : km <= 2000
+                    ? "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                    : "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
 
                 const marker = new google.maps.Marker({
                   position: pos,
@@ -89,6 +99,14 @@ function initMap() {
                 option.value = team;
                 option.textContent = team;
                 select.appendChild(option);
+
+                // InfoWindow klikil
+                const infoWindow = new google.maps.InfoWindow({
+                  content: `<strong>${team}</strong><br>${km} km`
+                });
+                marker.addListener("click", () => {
+                  infoWindow.open(map, marker);
+                });
               }
             });
 
