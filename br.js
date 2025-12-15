@@ -14,10 +14,10 @@ const teamMarkers = {}; // hoiame markerid võistkondade kaupa
 
 // Hajutamise funktsioon (lõpp-punktis markerite eraldamiseks)
 function jitterPosition(basePos, index) {
-  const offset = 0.002; // ~200m nihke (suurem kui enne)
+  const offset = 0.01; // ~1km nihke, et markerid oleks kindlasti eraldi
   return {
-    lat: basePos.lat + offset * Math.cos(index * 2 * Math.PI / 12),
-    lng: basePos.lng + offset * Math.sin(index * 2 * Math.PI / 12)
+    lat: basePos.lat + offset * Math.cos(index * 2 * Math.PI / 20),
+    lng: basePos.lng + offset * Math.sin(index * 2 * Math.PI / 20)
   };
 }
 
@@ -86,6 +86,7 @@ function initMap() {
                     ? "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
                     : "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
 
+                // Loo marker alati
                 const marker = new google.maps.Marker({
                   position: pos,
                   map,
