@@ -14,7 +14,7 @@ const teamMarkers = {}; // hoiame markerid võistkondade kaupa
 
 // Hajutamise funktsioon (lõpp-punktis markerite eraldamiseks)
 function jitterPosition(basePos, index) {
-  const offset = 0.01; // ~1km nihke, et markerid oleks kindlasti eraldi
+  const offset = 0.02; // ~2km nihke, et markerid oleks kindlasti eraldi
   return {
     lat: basePos.lat + offset * Math.cos(index * 2 * Math.PI / 20),
     lng: basePos.lng + offset * Math.sin(index * 2 * Math.PI / 20)
@@ -42,7 +42,7 @@ function initMap() {
       if (status === google.maps.DirectionsStatus.OK) {
         directionsRenderer.setDirections(result);
 
-        route = result.routes[0].overview_path;
+        route = result.routes[0].overview_path || [];
         totalPoints = route.length;
 
         // Lae CSV
@@ -63,20 +63,29 @@ function initMap() {
 
               if (!isNaN(km)) {
                 let pos;
+
                 if (km >= 4150) {
                   // Kohale jõudnud – hajutame lõpp-punktis
-                  const endPos = route.length > 0 ? route[route.length - 1] : brussel;
+                  const endPos = totalPoints > 0 ? route[totalPoints - 1] : brussel;
                   pos = jitterPosition(endPos, idx);
                 } else if (km <= 2000) {
                   // Brüsseli suunal
-                  const progress = km / 2000;
-                  const routeIdx = Math.floor(progress * totalPoints);
-                  pos = route[Math.min(routeIdx, totalPoints - 1)];
+                  if (totalPoints > 0) {
+                    const progress = km / 2000;
+                    const routeIdx = Math.floor(progress * totalPoints);
+                    pos = route[Math.min(routeIdx, totalPoints - 1)];
+                  } else {
+                    pos = tartu; // varukoordinaat
+                  }
                 } else {
                   // Tagasitee
-                  const backProgress = (km - 2000) / 2000;
-                  const routeIdx = Math.floor((1 - backProgress) * totalPoints);
-                  pos = route[Math.min(routeIdx, totalPoints - 1)];
+                  if (totalPoints > 0) {
+                    const backProgress = (km - 2000) / 2000;
+                    const routeIdx = Math.floor((1 - backProgress) * totalPoints);
+                    pos = route[Math.min(routeIdx, totalPoints - 1)];
+                  } else {
+                    pos = tartu; // varukoordinaat
+                  }
                 }
 
                 // Markerite värv
