@@ -67,9 +67,12 @@ function initMap() {
                 const pos = route[Math.min(idx, totalPoints - 1)];
 
                 // Markerite värv
-                const iconColor = km <= 2000
-                  ? "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                  : "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+                const iconColor = km > 4150
+  ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+  : km <= 2000
+    ? "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+    : "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+
 
                 const marker = new google.maps.Marker({
                   position: pos,
