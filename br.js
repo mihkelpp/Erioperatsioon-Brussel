@@ -12,12 +12,12 @@ let route = [];
 let totalPoints = 0;
 const teamMarkers = {}; // hoiame markerid võistkondade kaupa
 
-// Hajutamise funktsioon (et lõpp-punktis markerid ei kattuks)
+// Hajutamise funktsioon (lõpp-punktis markerite eraldamiseks)
 function jitterPosition(basePos, index) {
-  const offset = 0.0005; // ~50m nihke
+  const offset = 0.002; // ~200m nihke (suurem kui enne)
   return {
-    lat: basePos.lat + offset * Math.cos(index * 2 * Math.PI / 10),
-    lng: basePos.lng + offset * Math.sin(index * 2 * Math.PI / 10)
+    lat: basePos.lat + offset * Math.cos(index * 2 * Math.PI / 12),
+    lng: basePos.lng + offset * Math.sin(index * 2 * Math.PI / 12)
   };
 }
 
@@ -64,24 +64,23 @@ function initMap() {
               if (!isNaN(km)) {
                 let pos;
                 if (km >= 4150) {
-  // Kohale jõudnud – hajutame lõpp-punktis
-  const endPos = route.length > 0 ? route[route.length - 1] : brussel;
-  pos = jitterPosition(endPos, idx);
-} else if (km <= 2000) {
-  // Brüsseli suunal
-  const progress = km / 2000;
-  const routeIdx = Math.floor(progress * totalPoints);
-  pos = route[Math.min(routeIdx, totalPoints - 1)];
-} else {
-  // Tagasitee
-  const backProgress = (km - 2000) / 2000;
-  const routeIdx = Math.floor((1 - backProgress) * totalPoints);
-  pos = route[Math.min(routeIdx, totalPoints - 1)];
-}
-
+                  // Kohale jõudnud – hajutame lõpp-punktis
+                  const endPos = route.length > 0 ? route[route.length - 1] : brussel;
+                  pos = jitterPosition(endPos, idx);
+                } else if (km <= 2000) {
+                  // Brüsseli suunal
+                  const progress = km / 2000;
+                  const routeIdx = Math.floor(progress * totalPoints);
+                  pos = route[Math.min(routeIdx, totalPoints - 1)];
+                } else {
+                  // Tagasitee
+                  const backProgress = (km - 2000) / 2000;
+                  const routeIdx = Math.floor((1 - backProgress) * totalPoints);
+                  pos = route[Math.min(routeIdx, totalPoints - 1)];
+                }
 
                 // Markerite värv
-                const iconColor = km > 4150
+                const iconColor = km >= 4150
                   ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
                   : km <= 2000
                     ? "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
