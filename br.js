@@ -64,7 +64,8 @@ function initMap() {
                   idx = Math.floor((1 - backProgress) * totalPoints);
                 }
 
-                const pos = route[Math.min(idx, totalPoints - 1)];
+                const pos = jitterPosition(route[totalPoints - 1], Object.keys(teamMarkers).length);
+
 
                 // Markerite värv
                 const iconColor = km > 4150
@@ -123,6 +124,7 @@ function initMap() {
     <h3>Legend</h3>
     <p><img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"> Suund Brüsselisse</p>
     <p><img src="http://maps.google.com/mapfiles/ms/icons/green-dot.png"> Suund tagasi</p>
+    <p><img src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"> Kohale jõudnud</p>
     <p>Võistkonna nimi ja distants on nähtav kursori markeril hoidmisel</p>
   `;
 
