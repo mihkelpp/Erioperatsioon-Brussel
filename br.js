@@ -1,6 +1,7 @@
 // Koordinaadid
 const tartu = {lat: 58.37307488694068, lng: 26.726976347863893};
 const brussel = {lat: 50.844990391302076, lng: 4.349986359265218};
+const finishBase = {lat: 58.370367, lng: 26.716634}; // lõpetanute baaspositsioon
 
 // Google Sheets CSV link
 const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR00B6HxmGhC0bhhGIp3bEMt-mcvu1Tb185GvmlR2_sGsGth6Bwb3cr0F0Y7cXFg0WiQC6PTY4oJC8Q/pub?gid=0&single=true&output=csv";
@@ -14,7 +15,7 @@ const teamMarkers = {}; // hoiame markerid võistkondade kaupa
 
 // Hajutamise funktsioon (lõpp-punktis markerite eraldamiseks)
 function jitterPosition(basePos, index) {
-  const offset = 0.02; // ~2km nihke, et markerid oleks kindlasti eraldi
+  const offset = 0.001; // ~100m nihke, et markerid ei kattuks
   return {
     lat: basePos.lat + offset * Math.cos(index * 2 * Math.PI / 20),
     lng: basePos.lng + offset * Math.sin(index * 2 * Math.PI / 20)
@@ -65,9 +66,8 @@ function initMap() {
                 let pos;
 
                 if (km >= 4150) {
-                  // Kohale jõudnud – hajutame lõpp-punktis
-                  const endPos = totalPoints > 0 ? route[totalPoints - 1] : brussel;
-                  pos = jitterPosition(endPos, idx);
+                  // Kohale jõudnud – hajutame kindlal koordinaadil
+                  pos = jitterPosition(finishBase, idx);
                 } else if (km <= 2000) {
                   // Brüsseli suunal
                   if (totalPoints > 0) {
@@ -108,7 +108,7 @@ function initMap() {
                 // Lisa võistkond dropdowni
                 const option = document.createElement("option");
                 option.value = team;
-                option.textContent = team;
+                option.textContent = km >= 4150 ? `${team} (lõpetanud)` : team;
                 select.appendChild(option);
 
                 // InfoWindow klikil
