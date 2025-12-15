@@ -63,20 +63,22 @@ function initMap() {
 
               if (!isNaN(km)) {
                 let pos;
-                if (km > 4150) {
-                  // Kohale jõudnud – hajutame lõpp-punktis
-                  pos = jitterPosition(route[totalPoints - 1], idx);
-                } else if (km <= 2000) {
-                  // Brüsseli suunal
-                  const progress = km / 2000;
-                  const routeIdx = Math.floor(progress * totalPoints);
-                  pos = route[Math.min(routeIdx, totalPoints - 1)];
-                } else {
-                  // Tagasitee
-                  const backProgress = (km - 2000) / 2000;
-                  const routeIdx = Math.floor((1 - backProgress) * totalPoints);
-                  pos = route[Math.min(routeIdx, totalPoints - 1)];
-                }
+                if (km >= 4150) {
+  // Kohale jõudnud – hajutame lõpp-punktis
+  const endPos = route.length > 0 ? route[route.length - 1] : brussel;
+  pos = jitterPosition(endPos, idx);
+} else if (km <= 2000) {
+  // Brüsseli suunal
+  const progress = km / 2000;
+  const routeIdx = Math.floor(progress * totalPoints);
+  pos = route[Math.min(routeIdx, totalPoints - 1)];
+} else {
+  // Tagasitee
+  const backProgress = (km - 2000) / 2000;
+  const routeIdx = Math.floor((1 - backProgress) * totalPoints);
+  pos = route[Math.min(routeIdx, totalPoints - 1)];
+}
+
 
                 // Markerite värv
                 const iconColor = km > 4150
